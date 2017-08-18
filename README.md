@@ -86,4 +86,3 @@ redis-server ./redis.conf
 ```
 rails s
 ```
-

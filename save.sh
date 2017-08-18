@@ -4,8 +4,7 @@
     clear
     git add --all
     git commit -m "dev"
-    git push origin dev
+    git push origin dev --force
     sleep 59
     done
 EOF
-
