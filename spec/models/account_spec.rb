@@ -18,10 +18,10 @@ RSpec.describe Account, type: :model do
     account.inviter = "1"
     account.first_name = "Nurasyl"
     account.last_name = "Aldan"
-    account.gender = "1"
+    account.gender = 1
     account.birthday = "21.11.1996"
-    account.joined_ip = '127.0.0.1'
-    account.logged_ip = '127.0.0.1'
+    account.joined_ip = "127.0.0.1"
+    account.logged_ip = "127.0.0.1"
 
     expect(account.valid?).to be true
     end

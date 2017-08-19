@@ -48,7 +48,7 @@ module AccountHelper
         self.first_name value
     end
     def gender value
-        value = value.to_s.strip.to_i == 1 ? 1 : 0
+        value.to_s.to_i
     end
     def email value
         value = value.to_s.strip.downcase
@@ -68,10 +68,38 @@ module AccountHelper
         value.to_s.strip.gsub(' ', '').to_i
     end
     def inviter value
-        value.to_s.strip.gsub(' ', '').to_i
+        value.to_s.strip.downcase.gsub(' ', '')
     end
   end
   def encrypt_password value
       Digest::SHA256.hexdigest(value.to_s).to_s
+  end
+  def init_account
+    @current_user = nil
+    @user_is_auth = false
+    begin
+      @current_user = Account.find(session('account_id'))
+      unless @current_user.nil?
+        @user_is_auth = true
+      end
+    rescue
+    end
+  end
+  def login account
+      begin
+        unless account.nil?
+            return set_session_value(@session_key, 'account_id', account.id)
+        else
+            return false
+        end
+      rescue
+      end
+      return false
+  end
+  def logout
+      begin
+        return del_session_value(@session_key, 'account_id')
+      rescue
+      end
   end
 end

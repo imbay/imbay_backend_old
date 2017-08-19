@@ -37,6 +37,7 @@ class Account < ApplicationRecord
   validates_with AccountValidator
   before_save do
     self.password = encrypt_password(self.password)
+    self.language = $accountHelperConfig.languages.include?(self.language) ? self.language : $accountHelperConfig.default[:language]
   end
 
   validates :username,
@@ -53,4 +54,6 @@ class Account < ApplicationRecord
       uniqueness: { message: 'unique' },
       allow_nil: true,
       allow_blank: true
+  validates :gender,
+      inclusion: { in: [0, 1], message: "invalid" }
 end
