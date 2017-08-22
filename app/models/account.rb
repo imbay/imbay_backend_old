@@ -7,11 +7,11 @@ class AccountValidator < ActiveModel::Validator
       year = record.birthday.year
       if year > $accountHelperConfig.year[:max] || year < $accountHelperConfig.year[:min]
         # Is year limit.
-          record.birthday = "1996-11-21"
+          record.errors[:birthday] << "limit"
       end
     rescue
       # Is not correct date.
-      record.birthday = "1996-11-21"
+      record.errors[:birthday] << "invalid"
     end
 
     # Password.
@@ -20,13 +20,18 @@ class AccountValidator < ActiveModel::Validator
     end
 
     # Inviter.
-    record.inviter = nil
-    begin
-      user = Account.select('id').where(id: record.inviter).or(username=record.inviter).first
-      unless user.nil?
+    if record.inviter.nil?
+      record.inviter = nil
+    else
+      begin
+        user = Account.select(:id).where("username = ? OR id = ?", record.inviter, record.inviter.to_i).first
+      rescue
+      end
+      if user.nil?
+        record.errors[:inviter] << "not_found"
+      else
         record.inviter = user.id
       end
-    rescue
     end
   end
 end
@@ -37,8 +42,9 @@ class Account < ApplicationRecord
   validates_with AccountValidator
   before_save do
     self.password = encrypt_password(self.password)
-    self.language = $accountHelperConfig.languages.include?(self.language) ? self.language : $accountHelperConfig.default[:language]
   end
+
+  attr_accessor :inviter
 
   validates :username,
       length: { minimum: 5, maximum: 36, too_short: "min", too_long: "max" },
@@ -56,4 +62,6 @@ class Account < ApplicationRecord
       allow_blank: true
   validates :gender,
       inclusion: { in: [0, 1], message: "invalid" }
+  validates :password,
+      length: { minimum: 6, maximum: 100, too_short: "min", too_long: "max" }
 end

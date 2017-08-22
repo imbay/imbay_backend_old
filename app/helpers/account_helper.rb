@@ -48,7 +48,14 @@ module AccountHelper
         self.first_name value
     end
     def gender value
-        value.to_s.to_i
+        value = value.to_s.strip
+        if value == "0"
+          return 0
+        elsif value == "1"
+          return 1
+        else
+          return ""
+        end
     end
     def email value
         value = value.to_s.strip.downcase
@@ -68,7 +75,14 @@ module AccountHelper
         value.to_s.strip.gsub(' ', '').to_i
     end
     def inviter value
-        value.to_s.strip.downcase.gsub(' ', '')
+        value = value.to_s.strip.downcase
+        if value == ""
+          return nil
+        elsif value[0] == '@'
+          return value[1..-1]
+        else
+          return value
+        end
     end
   end
   def encrypt_password value

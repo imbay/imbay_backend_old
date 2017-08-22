@@ -8,11 +8,21 @@ class AccountController < ApplicationController
     @response = {
       :error => 1,
       :body => nil,
-      :session_key => @session_key
+      :session_key => @session_key,
+      :user => @current_user,
+      :is_auth => @user_is_auth
     }
     if @current_user.nil?
       @response[:error] = 2
     end
+  end
+
+  def user
+    render json: {
+      :session_key => @session_key,
+      :user => @current_user,
+      :is_auth => @user_is_auth
+    }
   end
 
   def sign_up
@@ -24,6 +34,7 @@ class AccountController < ApplicationController
     account.login_time = $time
     account.language = @normalizer.language params[:language]
     account.inviter = @normalizer.inviter params[:inviter]
+    account.email = @normalizer.email params[:email]
 
     account.first_name = @normalizer.first_name params[:first_name]
     account.last_name = @normalizer.last_name params[:last_name]
@@ -60,12 +71,6 @@ class AccountController < ApplicationController
       @response[:error] = 2
     end
 
-    render json: @response
-  end
-  def sign_out
-    if logout == true
-      @response[:error] = 0
-    end
     render json: @response
   end
   def sign_out
@@ -156,6 +161,30 @@ class AccountController < ApplicationController
       elsif @current_user.valid? && @current_user.save
         @response[:error] = 0
         @response[:body] = @current_user
+      end
+    end
+    render json: @response
+  end
+  def recovery
+    email = @normalizer.email params[:email]
+    if email.nil?
+      @response[:error] = 2
+      @response[:body] = nil
+    else
+      user = Account.find_by(email: email)
+      if user.nil?
+        @response[:error] = 2
+        @response[:body] = nil
+      else
+        new_password = SecureRandom.uuid.to_s.gsub('-', '')[0..9]
+        user.password = new_password
+        if user.save == true
+          @response[:error] = 0
+          @response[:body] = {
+            :email => user.email,
+            :password => user.password
+          }
+        end
       end
     end
     render json: @response

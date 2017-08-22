@@ -86,3 +86,12 @@ redis-server ./redis.conf
 ```
 rails s
 ```
+##### Git commit
+```
+git rm -r --cached . && git reset && git add --all && git commit -m "dev" && git push origin master
+```
+##### Save in development
+```
+git checkout dev && sudo chmod 777 save.sh && ./save.sh
+```
+

@@ -2,6 +2,7 @@ Rails.application.routes.draw do
     scope :v1 do
         root 'main#index'
         scope :account do
+            post '/user', to: 'account#user'
             post '/sign_up', to: 'account#sign_up'
             post '/sign_in', to: 'account#sign_in'
             post '/sign_out', to: 'account#sign_out'
@@ -13,6 +14,7 @@ Rails.application.routes.draw do
             post '/unactive', to: 'account#unactive'
             post '/active', to: 'account#active'
             post '/update', to: 'account#update'
+            post '/recovery', to: 'account#recovery'
         end
     end
 end

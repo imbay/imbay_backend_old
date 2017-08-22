@@ -8,7 +8,7 @@ end
 
 RSpec.describe AccountController, type: :controller do
     it "| sign up" do
-        post :sign_up, :params => { :username => "nurasyl", :password => "123456", :language => "es", :inviter => "", :first_name => "nurasyl", :last_name => "aldan", :gender => "1", :birthday => "" }
+        post :sign_up, :params => { :username => "nurasyl", :password => "123456", :language => "es", :inviter => "", :first_name => "nurasyl", :last_name => "aldan", :gender => "1", :birthday => "21.11.1996" }
         res = JSON.parse(response.body)
         $session_key = res['session_key']
         expect(res['error']).to eq 0

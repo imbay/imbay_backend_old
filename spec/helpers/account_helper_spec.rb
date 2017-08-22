@@ -19,6 +19,7 @@ RSpec.describe AccountHelper, type: :helper do
     end
     it "| email" do
       expect(normalizer.email(" Nurassyl.Aldan@gmail.com ")).to eq "nurassyl.aldan@gmail.com"
+      expect(normalizer.email(" ")).to eq nil
     end
     it "| password" do
       expect(normalizer.password(" my password ")).to eq "my password"
@@ -34,6 +35,12 @@ RSpec.describe AccountHelper, type: :helper do
       expect(normalizer.balance(" - 1")).to eq -1
       expect(normalizer.balance(" + 1 . 0")).to eq 1
       expect(normalizer.balance("5.5")).to eq 5
+    end
+    it "| inviter" do
+      expect(normalizer.inviter("@Nurasyl")).to eq "nurasyl"
+      expect(normalizer.inviter(" @1 ")).to eq "1"
+      expect(normalizer.inviter("Nurasyl")).to eq "nurasyl"
+      expect(normalizer.inviter(" ")).to eq nil
     end
   end
   context "| format" do
