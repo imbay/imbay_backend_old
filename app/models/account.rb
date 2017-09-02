@@ -25,12 +25,12 @@ class AccountValidator < ActiveModel::Validator
     else
       begin
         user = Account.select(:id).where("username = ? OR id = ?", record.inviter, record.inviter.to_i).first
+        if user.nil?
+          record.errors[:inviter] << "not_found"
+        else
+          record.inviter = user.id
+        end
       rescue
-      end
-      if user.nil?
-        record.errors[:inviter] << "not_found"
-      else
-        record.inviter = user.id
       end
     end
   end
@@ -42,7 +42,12 @@ class Account < ApplicationRecord
   validates_with AccountValidator
   before_save do
     self.password = encrypt_password(self.password)
+    self.join_time = $time
+    self.login_time = $time
   end
+
+  has_many :my_dialogs, class_name: "Dialog", foreign_key: "account_id", dependent: :destroy
+  has_many :dialogs, class_name: "UserDialog", foreign_key: "account_id", dependent: :destroy
 
   attr_accessor :inviter
 

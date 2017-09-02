@@ -4,7 +4,7 @@ class CreateAccounts < ActiveRecord::Migration[5.1]
       t.string        :username
       t.string        :password
       t.boolean       :is_active,               default: true
-      t.integer       :joined_time
+      t.integer       :join_time
       t.integer       :login_time
       t.string        :language
       t.string        :email,                   null: true

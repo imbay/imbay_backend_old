@@ -94,4 +94,3 @@ git rm -r --cached . && git reset && git add --all && git commit -m "dev" && git
 ```
 git checkout dev && sudo chmod 777 save.sh && ./save.sh
 ```
-

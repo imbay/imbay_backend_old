@@ -7,11 +7,13 @@ RSpec.configure do |c|
 end
 
 RSpec.describe AccountController, type: :controller do
+    $user_id = nil
     it "| sign up" do
         post :sign_up, :params => { :username => "nurasyl", :password => "123456", :language => "es", :inviter => "", :first_name => "nurasyl", :last_name => "aldan", :gender => "1", :birthday => "21.11.1996" }
         res = JSON.parse(response.body)
         $session_key = res['session_key']
         expect(res['error']).to eq 0
+        $user_id = res['body']['id']
     end
     it "| sign in valid" do
         post :sign_in, :params => { :session_key => $session_key, :username => " Nurasyl ", :password => " 123456 "}
@@ -66,10 +68,11 @@ RSpec.describe AccountController, type: :controller do
         expect(res['error']).to eq 0
         expect(res['body']['first_name']).to eq "Gaukhar"
     end
+=begin
     it "| sign out" do
         post :sign_out, :params => { :session_key => $session_key }
         res = JSON.parse(response.body)
         expect(res['error']).to eq 0
     end
-    after(:all) { Account.destroy_all }
+=end
 end

@@ -92,12 +92,14 @@ module AccountHelper
     @current_user = nil
     @user_is_auth = false
     begin
-      @current_user = Account.find(session('account_id'))
+      @current_user = Account.find(session('account_id')) rescue nil
       unless @current_user.nil?
         @user_is_auth = true
       end
     rescue
     end
+    $current_user = @current_user
+    $user_is_auth = @user_is_auth
   end
   def login account
       begin

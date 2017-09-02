@@ -9,7 +9,6 @@ class AccountController < ApplicationController
       :error => 1,
       :body => nil,
       :session_key => @session_key,
-      :user => @current_user,
       :is_auth => @user_is_auth
     }
     if @current_user.nil?
@@ -30,8 +29,6 @@ class AccountController < ApplicationController
 
     account.username = @normalizer.username params[:username]
     account.password = @normalizer.password params[:password]
-    account.joined_time = $time
-    account.login_time = $time
     account.language = @normalizer.language params[:language]
     account.inviter = @normalizer.inviter params[:inviter]
     account.email = @normalizer.email params[:email]
@@ -61,7 +58,7 @@ class AccountController < ApplicationController
     params[:password] = @normalizer.password(params[:password])
     params[:password] = encrypt_password(params[:password])
 
-    account = Account.where(username: params[:username], password: params[:password]).first
+    account = Account.where(username: params[:username], password: params[:password]).first rescue nil
 
     unless account.nil?
       @response[:error] = 0
@@ -171,7 +168,7 @@ class AccountController < ApplicationController
       @response[:error] = 2
       @response[:body] = nil
     else
-      user = Account.find_by(email: email)
+      user = Account.find_by(email: email) rescue nil
       if user.nil?
         @response[:error] = 2
         @response[:body] = nil
@@ -179,6 +176,9 @@ class AccountController < ApplicationController
         new_password = SecureRandom.uuid.to_s.gsub('-', '')[0..9]
         user.password = new_password
         if user.save == true
+          puts "Username: #{user.username}"
+          puts "Password: #{new_password}"
+          puts "E-mail: #{user.email}"
           @response[:error] = 0
           @response[:body] = {
             :email => user.email,
