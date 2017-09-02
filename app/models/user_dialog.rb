@@ -22,4 +22,6 @@ class UserDialog < ApplicationRecord
   attr_accessor :user_id
   belongs_to :user, class_name: "Account", foreign_key: "account_id"
   belongs_to :dialog
+
+  has_many :message, class_name: "Message", foreign_key: "dialog_id", dependent: :destroy
 end

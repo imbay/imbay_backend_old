@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170823231226) do
+ActiveRecord::Schema.define(version: 20170902103828) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "username"
@@ -46,9 +46,21 @@ ActiveRecord::Schema.define(version: 20170823231226) do
     t.index ["last_writer_id"], name: "index_dialogs_on_last_writer_id"
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.integer "account_id"
+    t.integer "dialog_id"
+    t.string "text"
+    t.integer "time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_messages_on_account_id"
+    t.index ["dialog_id"], name: "index_messages_on_dialog_id"
+  end
+
   create_table "user_dialogs", force: :cascade do |t|
     t.integer "account_id"
     t.integer "dialog_id"
+    t.integer "new_messages_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_user_dialogs_on_account_id"

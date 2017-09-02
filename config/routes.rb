@@ -27,6 +27,12 @@ Rails.application.routes.draw do
           post '/delete', to: 'dialog#delete_user'
           post '/list', to: 'dialog#dialogs'
           post '/quit', to: 'dialog#quit_dialog'
+          post '/dialog', to: 'dialog#dialog'
+          post '/read', to: 'dialog#read'
+          scope :message do
+            post '/', to: 'dialog#messages'
+            post '/new', to: 'dialog#new_message'
+          end
         end
     end
 end

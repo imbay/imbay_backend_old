@@ -1,0 +1,29 @@
+[33mcommit 0808f39a5e9a768116ff438fa975e0febf8f2af3[m
+Author: Nurasyl Aldan <nurassyl.aldan@gmail.com>
+Date:   Sat Sep 2 13:47:07 2017 +0600
+
+    Dialog was created
+
+[33mcommit 17daef2e5c58931316c1da09af9f0a6a125d16cb[m
+Author: Nurasyl Aldan <nurassyl.aldan@gmail.com>
+Date:   Tue Aug 22 18:22:16 2017 +0600
+
+    Repaired
+
+[33mcommit 1648022fad1cbfb784ce5b17a95c26f8fededf95[m
+Author: Nurasyl Aldan <nurassyl.aldan@gmail.com>
+Date:   Sat Aug 19 18:42:06 2017 +0600
+
+    Account sign up and sign in is was created
+
+[33mcommit e3414c4e33c47cf2de6ce9f274f56b8b2d75cb28[m
+Author: Nurasyl Aldan <nurassyl.aldan@gmail.com>
+Date:   Fri Aug 18 21:46:19 2017 +0600
+
+    Account model was created
+
+[33mcommit ea9e6a08266e3d40cc1d323b64c5070b9413f903[m
+Author: Nurasyl Aldan <nurassyl.aldan@gmail.com>
+Date:   Tue Aug 15 22:31:44 2017 +0600
+
+    Initialized

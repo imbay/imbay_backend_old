@@ -18,6 +18,46 @@ RSpec.describe DialogController, type: :controller do
       res = JSON.parse(response.body)
       expect(res['error']).to eq 0
   end
+  it "| dialog" do
+      post :dialog, :params => { :session_key => $session_key, :dialog_id => 0 }
+      res = JSON.parse(response.body)
+      expect(res['error']).to eq 4
+
+      post :dialog, :params => { :session_key => $session_key, :dialog_id => $dialog_id }
+      res = JSON.parse(response.body)
+      expect(res['error']).to eq 0
+  end
+  it "| read" do
+      post :read, :params => { :session_key => $session_key, :dialog_id => 0 }
+      res = JSON.parse(response.body)
+      expect(res['error']).to eq 4
+
+      post :read, :params => { :session_key => $session_key, :dialog_id => $dialog_id }
+      res = JSON.parse(response.body)
+      #expect(res['error']).to eq 0
+  end
+  it "| new_message" do
+      post :new_message, :params => { :session_key => $session_key, :dialog_id => 0, :text => "My message" }
+      res = JSON.parse(response.body)
+      expect(res['error']).to eq 4
+
+      post :new_message, :params => { :session_key => $session_key, :dialog_id => $dialog_id, :text => "My message" }
+      res = JSON.parse(response.body)
+      expect(res['error']).to eq 0
+
+      post :new_message, :params => { :session_key => $session_key, :dialog_id => $dialog_id, :text => "" }
+      res = JSON.parse(response.body)
+      expect(res['error']).to eq 3
+  end
+  it "| messages" do
+      post :messages, :params => { :session_key => $session_key, :dialog_id => 0 }
+      res = JSON.parse(response.body)
+      expect(res['error']).to eq 4
+
+      post :messages, :params => { :session_key => $session_key, :dialog_id => $dialog_id }
+      res = JSON.parse(response.body)
+      expect(res['error']).to eq 0
+  end
   it "| new user" do
       post :new_user, :params => { :session_key => $session_key, :dialog_id => 0, :user_id => "1" }
       res = JSON.parse(response.body)
@@ -60,7 +100,7 @@ RSpec.describe DialogController, type: :controller do
       expect(res['error']).to eq 4
   end
   it "| delete dialog" do
-      post :delete_dialog, :params => { :session_key => $session_key, :dialog_id => "0" }
+      post :delete_dialog, :params => { :session_key => $session_key, :dialog_id => 0 }
       res = JSON.parse(response.body)
       expect(res['error']).to eq 4
   end
