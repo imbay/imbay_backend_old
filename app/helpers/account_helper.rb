@@ -118,4 +118,16 @@ module AccountHelper
       rescue
       end
   end
+  def set_login_time account
+      begin
+        unless account.nil?
+            account.login_time = $time
+            return account.save
+        else
+            return false
+        end
+      rescue
+      end
+      return false
+  end
 end

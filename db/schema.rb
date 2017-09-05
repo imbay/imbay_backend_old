@@ -28,6 +28,10 @@ ActiveRecord::Schema.define(version: 20170904205657) do
     t.integer "inviter"
     t.string "first_name"
     t.string "last_name"
+    t.string "first_name_en"
+    t.string "last_name_en"
+    t.string "first_name_ru"
+    t.string "last_name_ru"
     t.integer "gender", limit: 2
     t.date "birthday"
     t.datetime "created_at", null: false
@@ -38,7 +42,7 @@ ActiveRecord::Schema.define(version: 20170904205657) do
 
   create_table "blacklists", force: :cascade do |t|
     t.bigint "account_id"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.integer "time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

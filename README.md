@@ -65,9 +65,9 @@ rake db:create:all
 ```
 ##### Migrate
 ```
-RAILS_ENV=production rake db:migrate
-RAILS_ENV=test rake db:migrate
-RAILS_ENV=development rake db:migrate
+RAILS_ENV=development
+rake db:seed
+rake db:migrate
 ```
 ##### Install redis
 ```
@@ -88,7 +88,7 @@ rails s
 ```
 ##### Git commit
 ```
-git rm -r --cached . && git reset && git add --all && git commit -m "dev" && git push origin master
+git rm -r --cached . && git reset && git add --all && git commit -m "My comment" && git push origin master
 ```
 ##### Save in development
 ```

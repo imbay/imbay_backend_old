@@ -31,8 +31,7 @@ class Blacklist < ApplicationRecord
 
   class << self; attr_accessor :limit end
   @limit = 1000
-
-  attr_accessor :user_id
+  
   self.per_page = 100
 
   belongs_to :account, class_name: "Account", foreign_key: "account_id"

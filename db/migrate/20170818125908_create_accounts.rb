@@ -14,6 +14,10 @@ class CreateAccounts < ActiveRecord::Migration[5.1]
 
       t.string        :first_name
       t.string        :last_name
+      t.string        :first_name_en
+      t.string        :last_name_en
+      t.string        :first_name_ru
+      t.string        :last_name_ru
       t.integer       :gender,                  limit: 1
       t.date          :birthday
 

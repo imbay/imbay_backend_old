@@ -71,7 +71,7 @@ class UserController < ApplicationController
       input = params[:input].strip
       page = params[:page].to_i
       users = []
-      model_ = Account.select(:id, :username, :first_name, :last_name).order(login_time: :desc, id: :desc)
+      model_ = Account.select(:id, :username, :first_name, :last_name, :first_name_ru, :last_name_ru, :first_name_en, :last_name_en).order(login_time: :desc, id: :desc)
       if input == ""
         users = model_.where(is_active: true).paginate(:page => page).all
       else
@@ -81,13 +81,28 @@ class UserController < ApplicationController
           split = split_name(input)
           if split.length == 1
             # username or first name or last name
-            name = [split[0].capitalize, to_russian(split[0].capitalize), to_english(split[0].capitalize)]
-            users = model_.where("is_active = ? AND username = ? OR first_name IN (?) OR last_name IN (?)", true, split[0].downcase, name, name).limit(100).all
+            name = split[0].capitalize
+            users = model_.where("is_active = ? AND username = ? OR first_name IN (?) OR last_name IN (?) OR first_name_ru = ? OR last_name_ru = ? OR first_name_en = ? OR last_name_en = ?", true, split[0].downcase, [name, to_russian(name), to_english(name)], [name, to_russian(name), to_english(name)], name, name, name, name).limit(100).all
           elsif split.length == 2
             # first name and last name.
-            name = [split[0].capitalize, to_russian(split[0].capitalize), to_english(split[0].capitalize)]
-            name1 = [split[1].capitalize, to_russian(split[1].capitalize), to_english(split[1].capitalize)]
-            users = model_.where("is_active = ? AND (first_name IN (?) AND last_name IN (?)) OR (last_name IN (?) AND first_name IN (?))", true, name, name1, name, name1).limit(100).all
+            name = split[0].capitalize
+            name1 = split[1].capitalize
+            users = model_.where("is_active = ? AND
+            (
+            (first_name IN (?) AND last_name IN (?)) OR
+            (last_name IN (?) AND first_name IN (?)) OR
+            (first_name_ru = ? AND last_name_ru = ?) OR
+            (last_name_ru = ? AND first_name_ru = ?) OR
+            (first_name_en = ? AND last_name_en = ?) OR
+            (last_name_en = ? AND first_name_en = ?)
+            )
+            ", true,
+            [name, to_russian(name), to_english(name)], [name1, to_russian(name1), to_english(name1)],
+            [name, to_russian(name), to_english(name)], [name1, to_russian(name1), to_english(name1)],
+            name, name1,
+            name, name1,
+            name, name1,
+            name, name1).limit(100).all
           end
         end
         @response[:body] = users

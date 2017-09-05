@@ -221,7 +221,7 @@ class DialogController < ApplicationController
       ActiveRecord::Base.transaction do
         text = params[:text].to_s
         dialog_id = params[:dialog_id].to_i
-        dialog = @current_user.dialogs.find(dialog_id) rescue nil
+        dialog = @current_user.dialogs.find(dialog_id)
         unless dialog.nil?
           message = dialog.message.new
           message.text = @dialog_normalizer.message text
@@ -231,11 +231,11 @@ class DialogController < ApplicationController
             @response[:body] = message.errors.messages
           else
             if message.save(validate: false)
-              dialog_ = Dialog.find(dialog.id) rescue nil
+              dialog_ = Dialog.find(dialog.id)
               unless dialog_.nil?
                 dialog_.last_message = @dialog_normalizer.last_message text
                 dialog_.last_writer_id = @current_user.id
-                if dialog_.save
+                if dialog_.save(validate: false)
                   dialog.dialog.users.all.each do |dialog|
                     dialog.new_messages_count = dialog.new_messages_count+1
                     unless dialog.save(validate: false)

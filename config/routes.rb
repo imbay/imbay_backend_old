@@ -1,14 +1,15 @@
 Rails.application.routes.draw do
+  scope :api do
     scope :v1 do
         scope :account do
-            post '/user', to: 'account#user'
+            get '/user', to: 'account#user'
             post '/sign_up', to: 'account#sign_up'
             post '/sign_in', to: 'account#sign_in'
-            post '/sign_out', to: 'account#sign_out'
+            get '/sign_out', to: 'account#sign_out'
             post '/unactive', to: 'account#unactive'
             post '/active', to: 'account#active'
             post '/recovery', to: 'account#recovery'
-            post '/blacklist', to: 'account#blacklist'
+            get '/blacklist', to: 'account#blacklist'
             scope :update do
               post '/', to: 'account#update'
               post '/email', to: 'account#update_email'
@@ -18,20 +19,20 @@ Rails.application.routes.draw do
             end
         end
         scope :dialog do
-          post '/', to: 'dialog#my_dialogs'
+          get '/', to: 'dialog#my_dialogs'
           post '/new', to: 'dialog#new_dialog'
           post '/delete', to: 'dialog#delete_dialog'
-          post '/list', to: 'dialog#dialogs'
+          get '/list', to: 'dialog#dialogs'
           post '/quit', to: 'dialog#quit_dialog'
-          post '/dialog', to: 'dialog#dialog'
+          get '/dialog', to: 'dialog#dialog'
           post '/read', to: 'dialog#read'
           scope :user do
-            post '/', to: 'dialog#users'
+            get '/', to: 'dialog#users'
             post '/new', to: 'dialog#new_user'
             post '/delete', to: 'dialog#delete_user'
           end
           scope :message do
-            post '/', to: 'dialog#messages'
+            get '/', to: 'dialog#messages'
             post '/new', to: 'dialog#new_message'
           end
         end
@@ -42,4 +43,5 @@ Rails.application.routes.draw do
           post '/unblock', to: 'user#unblock'
         end
     end
+  end
 end

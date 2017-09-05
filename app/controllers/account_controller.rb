@@ -1,6 +1,7 @@
 class AccountController < ApplicationController
   include SessionHelper
   include AccountHelper
+  include UserHelper
   before_action :init_session, :init_account, :init_controller
 
   def init_controller
@@ -36,6 +37,13 @@ class AccountController < ApplicationController
 
       account.first_name = @normalizer.first_name params[:first_name]
       account.last_name = @normalizer.last_name params[:last_name]
+
+      account.first_name_ru = to_russian(account.first_name)
+      account.last_name_ru = to_russian(account.last_name)
+
+      account.first_name_en = to_english(account.first_name)
+      account.last_name_en = to_english(account.last_name)
+
       account.gender = @normalizer.gender params[:gender]
       account.birthday = params[:birthday]
 
@@ -59,12 +67,13 @@ class AccountController < ApplicationController
     params[:password] = @normalizer.password(params[:password])
     params[:password] = encrypt_password(params[:password])
 
-    account = Account.where(username: params[:username], password: params[:password]).first rescue nil
+    account = Account.find_by(username: params[:username], password: params[:password])
 
     unless account.nil?
       @response[:error] = 0
       @response[:body] = account
       login(account)
+      set_login_time(account)
     else
       @response[:error] = 2
     end

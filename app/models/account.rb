@@ -40,11 +40,13 @@ class Account < ApplicationRecord
   include AccountHelper
   include ActiveModel::Validations
   validates_with AccountValidator
-  before_save do
+
+  def _before_save_
     self.password = encrypt_password(self.password)
     self.join_time = $time
     self.login_time = $time
   end
+  before_save :_before_save_, on: :create
 
   self.per_page = 100
 
