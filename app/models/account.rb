@@ -46,8 +46,11 @@ class Account < ApplicationRecord
     self.login_time = $time
   end
 
+  self.per_page = 100
+
   has_many :my_dialogs, class_name: "Dialog", foreign_key: "account_id", dependent: :destroy
   has_many :dialogs, class_name: "UserDialog", foreign_key: "account_id", dependent: :destroy
+  has_many :blacklist, class_name: "Blacklist", foreign_key: "account_id", dependent: :destroy
 
   attr_accessor :inviter
 

@@ -43,3 +43,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'pg', '~> 0.18.2'
 gem 'redis', '~> 3.2'
+gem 'will_paginate', '~> 3.1.0'

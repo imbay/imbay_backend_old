@@ -50,11 +50,11 @@ RSpec.describe DialogController, type: :controller do
       expect(res['error']).to eq 3
   end
   it "| messages" do
-      post :messages, :params => { :session_key => $session_key, :dialog_id => 0 }
+      post :messages, :params => { :session_key => $session_key, :dialog_id => 0, :page => 1 }
       res = JSON.parse(response.body)
       expect(res['error']).to eq 4
 
-      post :messages, :params => { :session_key => $session_key, :dialog_id => $dialog_id }
+      post :messages, :params => { :session_key => $session_key, :dialog_id => $dialog_id, :page => 1 }
       res = JSON.parse(response.body)
       expect(res['error']).to eq 0
   end

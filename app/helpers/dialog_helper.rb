@@ -10,7 +10,7 @@ module DialogHelper
     end
     def is_anon value
       value = value.to_s.strip
-      if value == "1"
+      if value == "1" || value == "true"
         return true
       else
         return false

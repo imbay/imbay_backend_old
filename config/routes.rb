@@ -8,6 +8,7 @@ Rails.application.routes.draw do
             post '/unactive', to: 'account#unactive'
             post '/active', to: 'account#active'
             post '/recovery', to: 'account#recovery'
+            post '/blacklist', to: 'account#blacklist'
             scope :update do
               post '/', to: 'account#update'
               post '/email', to: 'account#update_email'
@@ -17,22 +18,28 @@ Rails.application.routes.draw do
             end
         end
         scope :dialog do
-          scope :user do
-            post '/', to: 'dialog#users'
-            post '/new', to: 'dialog#new_user'
-            post '/delete', to: 'dialog#delete_dialog'
-          end
           post '/', to: 'dialog#my_dialogs'
           post '/new', to: 'dialog#new_dialog'
-          post '/delete', to: 'dialog#delete_user'
+          post '/delete', to: 'dialog#delete_dialog'
           post '/list', to: 'dialog#dialogs'
           post '/quit', to: 'dialog#quit_dialog'
           post '/dialog', to: 'dialog#dialog'
           post '/read', to: 'dialog#read'
+          scope :user do
+            post '/', to: 'dialog#users'
+            post '/new', to: 'dialog#new_user'
+            post '/delete', to: 'dialog#delete_user'
+          end
           scope :message do
             post '/', to: 'dialog#messages'
             post '/new', to: 'dialog#new_message'
           end
+        end
+        scope :user do
+          get '/', to: 'user#search'
+          get '/:id', to: 'user#profile'
+          post '/block', to: 'user#block'
+          post '/unblock', to: 'user#unblock'
         end
     end
 end

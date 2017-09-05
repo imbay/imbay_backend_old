@@ -11,8 +11,9 @@ default: &default
 
 development:
   <<: *default
-  adapter: sqlite3
-  database: db/development.sqlite3
+  adapter: postgresql
+  database: imbay_development
+  password: 12345
 
 test:
   <<: *default

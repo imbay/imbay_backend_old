@@ -1,6 +1,6 @@
 class UserDialogValidator < ActiveModel::Validator
   def validate(record)
-    user = Account.find(record.user_id) rescue nil
+    user = Account.select(:id).find(record.user_id)
     if user.nil?
       record.errors[:user] << "not_found"
     else
@@ -8,7 +8,8 @@ class UserDialogValidator < ActiveModel::Validator
       if record.class.exists?(account_id: record.user_id) == true
         record.errors[:user] << "is_exists"
       end
-      if record.class.count >= 10
+      limit = 10
+      if record.class.limit(limit).count(:id) >= limit
         record.errors[:user] << "limit"
       end
     end

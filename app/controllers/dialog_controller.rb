@@ -1,6 +1,6 @@
 class DialogController < ApplicationController
-  include AccountHelper
   include SessionHelper
+  include AccountHelper
   include DialogHelper
   before_action :init_session, :init_account, :init_controller
 
@@ -30,11 +30,10 @@ class DialogController < ApplicationController
         else
           if dialog.save
             users = dialog.users.new
-            users.user_id = @current_user.id
-            if users.valid? && users.save
+            users.user = @current_user
+            if users.save(validate: false)
               @response[:error] = 0
               @response[:body] = dialog
-              @response[:dialogs] = @current_user.dialogs
             else
               raise ActiveRecord::Rollback
             end
@@ -118,7 +117,7 @@ class DialogController < ApplicationController
             @response[:error] = 3
             @response[:body] = user.errors.messages
           else
-            if user.save
+            if user.save(validate: false)
               @response[:error] = 0
             end
           end
@@ -221,7 +220,8 @@ class DialogController < ApplicationController
     if @user_is_auth
       ActiveRecord::Base.transaction do
         text = params[:text].to_s
-        dialog = @current_user.dialogs.find(params[:dialog_id].to_i) rescue nil
+        dialog_id = params[:dialog_id].to_i
+        dialog = @current_user.dialogs.find(dialog_id) rescue nil
         unless dialog.nil?
           message = dialog.message.new
           message.text = @dialog_normalizer.message text
@@ -230,7 +230,7 @@ class DialogController < ApplicationController
             @response[:error] = 3
             @response[:body] = message.errors.messages
           else
-            if message.save
+            if message.save(validate: false)
               dialog_ = Dialog.find(dialog.id) rescue nil
               unless dialog_.nil?
                 dialog_.last_message = @dialog_normalizer.last_message text
@@ -269,7 +269,7 @@ class DialogController < ApplicationController
         dialog = @current_user.dialogs.find(params[:dialog_id].to_i) rescue nil
         unless dialog.nil?
           @response[:error] = 0
-          @response[:body] = dialog.message.all
+          @response[:body] = dialog.message.paginate(:page => params[:page]).order(time: :desc, id: :desc).all
         else
           # Dialog is not found.
           @response[:error] = 4

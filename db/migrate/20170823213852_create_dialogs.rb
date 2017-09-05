@@ -4,7 +4,7 @@ class CreateDialogs < ActiveRecord::Migration[5.1]
       t.belongs_to    :account, index: true
       t.timestamps
 
-      t.string        :title, null: true
+      t.string        :title
       t.integer       :time
       t.boolean       :is_anon, default: false
       t.string        :last_message, null: true

@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170902103828) do
+ActiveRecord::Schema.define(version: 20170904205657) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "accounts", force: :cascade do |t|
     t.string "username"
@@ -25,7 +28,7 @@ ActiveRecord::Schema.define(version: 20170902103828) do
     t.integer "inviter"
     t.string "first_name"
     t.string "last_name"
-    t.integer "gender", limit: 1
+    t.integer "gender", limit: 2
     t.date "birthday"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -33,22 +36,32 @@ ActiveRecord::Schema.define(version: 20170902103828) do
     t.index ["username"], name: "index_accounts_on_username", unique: true
   end
 
+  create_table "blacklists", force: :cascade do |t|
+    t.bigint "account_id"
+    t.integer "user_id"
+    t.integer "time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_blacklists_on_account_id"
+    t.index ["user_id"], name: "index_blacklists_on_user_id"
+  end
+
   create_table "dialogs", force: :cascade do |t|
-    t.integer "account_id"
+    t.bigint "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title"
     t.integer "time"
     t.boolean "is_anon", default: false
     t.string "last_message"
-    t.integer "last_writer_id"
+    t.bigint "last_writer_id"
     t.index ["account_id"], name: "index_dialogs_on_account_id"
     t.index ["last_writer_id"], name: "index_dialogs_on_last_writer_id"
   end
 
   create_table "messages", force: :cascade do |t|
-    t.integer "account_id"
-    t.integer "dialog_id"
+    t.bigint "account_id"
+    t.bigint "dialog_id"
     t.string "text"
     t.integer "time"
     t.datetime "created_at", null: false
@@ -58,8 +71,8 @@ ActiveRecord::Schema.define(version: 20170902103828) do
   end
 
   create_table "user_dialogs", force: :cascade do |t|
-    t.integer "account_id"
-    t.integer "dialog_id"
+    t.bigint "account_id"
+    t.bigint "dialog_id"
     t.integer "new_messages_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
